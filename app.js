@@ -22,11 +22,29 @@ app.use(session({
   saveUnitialized : true
   })
 );
-app.use('/', function(req,res){
+app.get('/', function(req,res){
   MongoClient.connect(mongoURL, function(err,db){
     const robots = db.collection('robots');
     robots.find({}).toArray(function (err, docs){
       res.render("index", {robots: docs})
+    })
+  })
+});
+
+// This block of code did not render, will re-attempt immediately below
+// app.get('/:id', function (req, res) {
+//  let id = req.params.id - 1;
+//  res.render('id', {id: robots});
+//  console.log(id);
+// })
+
+app.get('/:id', function(req,res){
+  let id = parseInt(req.params.id);
+  console.log(id);
+  MongoClient.connect(mongoURL, function(err, db){
+    const robots = db.collection('robots');
+    robots.find({"id": id}).toArray(function(err, docs){
+      res.render('id', {robots: docs})
     })
   })
 });
