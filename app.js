@@ -35,6 +35,7 @@ app.get('/', function(req,res){
 app.get('/:id', function(req,res){
   let id = parseInt(req.params.id);
   console.log(req.params);
+  console.log(req.params.id);
   if (Number.isInteger(id)){
     MongoClient.connect(mongoURL, function(err, db){
       const robots = db.collection('robots');
@@ -58,21 +59,33 @@ app.get('/:id', function(req,res){
         res.render('available', {robots: docs})
       })
     })
-  } else {
-    let searchTearm = req.params.id;
+  }
+});
+
+app.get('/skills/:skills', function(req,res){
+    let searchTearm = req.params.skills;
     console.log('skills');
     console.log("searchTearm = "+searchTearm);
-    console.log(req.body);
     MongoClient.connect(mongoURL, function(err, db){
       const robots = db.collection('robots');
-      robots.createIndex({skills : "text"})
+      robots.createIndex({skills : "text"});
       robots.find({$text: {$search: searchTearm}}).toArray(function(err, docs){
         res.render('skills', {robots: docs})
       })
     })
-  } // else if (req.params.id === 'country'){
-  //
-  // }
+});
+
+app.get('/country/:country', function(req,res){
+    let searchTearm = req.params.country;
+    console.log('country');
+    console.log("searchTearm = "+searchTearm);
+    MongoClient.connect(mongoURL, function(err, db){
+      const robots = db.collection('robots');
+      // robots.createIndex({'address.country' : "text"});
+      robots.find({'address.country': searchTearm}).toArray(function(err, docs){
+        res.render('country', {robots: docs})
+      })
+    })
 });
 
 
