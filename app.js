@@ -14,7 +14,7 @@ app.set('view engine', 'mustache');
 app.set('views','./views');
 
 app.use(parser.json());
-app.use(parser.urlencoded({extended : false}));
+app.use(parser.urlencoded({extended : true}));
 app.use(express.static(__dirname+'/public'));
 app.use(session({
   secret : 'admin',
@@ -22,6 +22,7 @@ app.use(session({
   saveUnitialized : true
   })
 );
+
 app.get('/', function(req,res){
   MongoClient.connect(mongoURL, function(err,db){
     const robots = db.collection('robots');
@@ -30,13 +31,6 @@ app.get('/', function(req,res){
     })
   })
 });
-
-// This block of code did not render, will re-attempt immediately below
-// app.get('/:id', function (req, res) {
-//  let id = req.params.id - 1;
-//  res.render('id', {id: robots});
-//  console.log(id);
-// })
 
 app.get('/:id', function(req,res){
   let id = parseInt(req.params.id);
@@ -64,7 +58,21 @@ app.get('/:id', function(req,res){
         res.render('available', {robots: docs})
       })
     })
-  }
+  } else {
+    let searchTearm = req.params.id;
+    console.log('skills');
+    console.log("searchTearm = "+searchTearm);
+    console.log(req.body);
+    MongoClient.connect(mongoURL, function(err, db){
+      const robots = db.collection('robots');
+      robots.createIndex({skills : "text"})
+      robots.find({$text: {$search: searchTearm}}).toArray(function(err, docs){
+        res.render('skills', {robots: docs})
+      })
+    })
+  } // else if (req.params.id === 'country'){
+  //
+  // }
 });
 
 
