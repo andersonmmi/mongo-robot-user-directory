@@ -1,0 +1,27 @@
+{
+  "name": "mongo-robot-user-directory",
+  "version": "1.0.0",
+  "description": "\"LinkedIn for Robots using MongoDB\"",
+  "main": "app.js",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "express-session": "^1.15.5",
+    "mongodb": "^2.2.31",
+    "mustache-express": "^1.2.5"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andersonmmi/mongo-robot-user-directory.git"
+  },
+  "author": "Aaron Anderson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andersonmmi/mongo-robot-user-directory/issues"
+  },
+  "homepage": "https://github.com/andersonmmi/mongo-robot-user-directory#readme"
+}
