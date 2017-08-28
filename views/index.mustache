@@ -5,10 +5,20 @@
     <title>Mongo-Robot-User-Directory</title>
     <link rel="stylesheet" href="/styles.css">
   </head>
-  <body>
+  <body class="directory">
     <h1>This is Mongo-Robot-User-Directory!!</h1>
     {{#robots}}
-      {{.}}
+      <div class="userCard">
+
+
+        <img src="{{avatar}}" />
+        <h2>{{name}}</h2>
+        <a href={{id}}>{{name}}</a>
+        <h3>{{job}} | {{company}}</h3>
+
+      </div>
+
+
     {{/robots}}
   </body>
 </html>
