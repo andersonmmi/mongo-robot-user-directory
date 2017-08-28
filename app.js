@@ -40,14 +40,33 @@ app.get('/', function(req,res){
 
 app.get('/:id', function(req,res){
   let id = parseInt(req.params.id);
-  console.log(id);
-  MongoClient.connect(mongoURL, function(err, db){
-    const robots = db.collection('robots');
-    robots.find({"id": id}).toArray(function(err, docs){
-      res.render('id', {robots: docs})
+  console.log(req.params);
+  if (Number.isInteger(id)){
+    MongoClient.connect(mongoURL, function(err, db){
+      const robots = db.collection('robots');
+      robots.find({"id": id}).toArray(function(err, docs){
+        res.render('id', {robots: docs})
+      })
     })
-  })
+  } else if (req.params.id === 'employed'){
+    console.log('employed');
+    MongoClient.connect(mongoURL, function(err, db){
+      const robots = db.collection('robots');
+      robots.find({job: {$not: {$in: [null]}}}).toArray(function(err, docs){
+        res.render('employed', {robots: docs})
+      })
+    })
+  } else if (req.params.id === 'available'){
+    console.log('available');
+    MongoClient.connect(mongoURL, function(err, db){
+      const robots = db.collection('robots');
+      robots.find({job: {$in: [null]}}).toArray(function(err, docs){
+        res.render('available', {robots: docs})
+      })
+    })
+  }
 });
+
 
 app.listen(app.get('port'), function(){
   console.log('listening on 3000');
