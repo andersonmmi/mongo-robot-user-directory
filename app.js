@@ -66,13 +66,32 @@ app.get('/skills/:skills', function(req,res){
     let searchTearm = req.params.skills;
     console.log('skills');
     console.log("searchTearm = "+searchTearm);
-    MongoClient.connect(mongoURL, function(err, db){
-      const robots = db.collection('robots');
-      robots.createIndex({skills : "text"});
-      robots.find({$text: {$search: searchTearm}}).toArray(function(err, docs){
-        res.render('skills', {robots: docs})
+    if (searchTearm === 'available'){
+      console.log('available');
+      MongoClient.connect(mongoURL, function(err, db){
+        const robots = db.collection('robots');
+        robots.find({job: {$in: [null]}}).toArray(function(err, docs){
+          res.render('available', {robots: docs})
+        })
+      })  
+    } else if (searchTearm === 'employed'){
+      console.log('employed');
+      MongoClient.connect(mongoURL, function(err, db){
+        const robots = db.collection('robots');
+        robots.find({job: {$not: {$in: [null]}}}).toArray(function(err, docs){
+          res.render('employed', {robots: docs})
+        })
       })
-    })
+    } else
+      MongoClient.connect(mongoURL, function(err, db){
+        const robots = db.collection('robots');
+        // robots.createIndex({skills : "text"});
+        robots.find({"skills":searchTearm}).toArray(function(err, docs){
+          // robots.find({$text: {$search: searchTearm}}).toArray(function(err, docs){
+          res.render('skills', {robots: docs})
+        })
+      })
+
 });
 
 app.get('/country/:country', function(req,res){
